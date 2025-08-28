@@ -25,7 +25,14 @@ app.add_middleware(
 # Mount static files (frontend)
 frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 if os.path.exists(frontend_path):
-    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+    app.mount("/static", StaticFiles(directory=frontend_path, html=True), name="static")
+else:
+    # Fallback for production - try relative path
+    import pathlib
+    current_dir = pathlib.Path(__file__).parent.parent
+    frontend_fallback = current_dir / "frontend"
+    if frontend_fallback.exists():
+        app.mount("/static", StaticFiles(directory=str(frontend_fallback), html=True), name="static")
 
 rag_service = RAGService()
 
@@ -46,9 +53,18 @@ class DevotionalResponse(BaseModel):
 
 @app.get("/")
 async def serve_frontend():
+    # Try main path first
     frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "index.html")
     if os.path.exists(frontend_path):
-        return FileResponse(frontend_path)
+        return FileResponse(frontend_path, media_type="text/html")
+    
+    # Fallback for production
+    import pathlib
+    current_dir = pathlib.Path(__file__).parent.parent
+    frontend_fallback = current_dir / "frontend" / "index.html"
+    if frontend_fallback.exists():
+        return FileResponse(str(frontend_fallback), media_type="text/html")
+    
     return {"message": "AOG Family Devotional RAG API"}
 
 @app.get("/api")

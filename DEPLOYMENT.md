@@ -59,9 +59,16 @@ PINECONE_API_KEY=your_pinecone_api_key_here
 ## 📋 Post-Deployment Testing
 
 Once deployed, test these URLs:
-- `https://your-app.up.railway.app/` - Frontend
+- `https://your-app.up.railway.app/` - Frontend (HTML page)
+- `https://your-app.up.railway.app/static/style.css` - CSS file
+- `https://your-app.up.railway.app/static/script.js` - JavaScript file  
 - `https://your-app.up.railway.app/api` - API health
 - `https://your-app.up.railway.app/health` - Health check
+
+**Troubleshooting Static Files:**
+- If CSS/JS don't load, check browser developer tools for 404 errors
+- Verify static files are included in deployment
+- Check Railway logs for any static file serving errors
 
 ## 🎯 What's Included
 
