@@ -3,6 +3,7 @@
 .env.example
 # Python
 __pycache__/
+.nothing_really
 *.pyc
 *.pyo
 *.pyd
