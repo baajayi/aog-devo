@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOG Family Devotionals</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🙏 AOG Family Devotionals</h1>
+            <p>Personalized devotionals for every member of your family</p>
+        </header>
+
+        <main>
+            <div class="form-section">
+                <form id="devotionalForm">
+                    <div class="form-group">
+                        <label for="ageGroup">Select Age Group:</label>
+                        <select id="ageGroup" name="ageGroup" required>
+                            <option value="">Choose an age group...</option>
+                            <option value="children">Children (5-12 years)</option>
+                            <option value="teens">Teens (13-17 years)</option>
+                            <option value="young_adults">Young Adults (18-25 years)</option>
+                            <option value="adults">Adults (26+ years)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topic">Topic (Optional):</label>
+                        <input type="text" id="topic" name="topic" placeholder="e.g., Faith, Love, Patience...">
+                        <div class="suggested-topics">
+                            <span>Suggestions:</span>
+                            <div id="topicSuggestions" class="topic-buttons">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="generateBtn">
+                        <span id="btnText">Generate Devotional</span>
+                        <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div id="devotionalResult" class="result-section" style="display: none;">
+                <div class="devotional-card">
+                    <h2 id="devotionalTitle"></h2>
+                    <h3 id="questionOfDay" class="question-day"></h3>
+                    
+                    <div class="listen-section">
+                        <h3>👂 LISTEN to God through His Word</h3>
+                        <div id="listenContent" class="devotional-section"></div>
+                    </div>
+                    
+                    <div class="learn-section">
+                        <h3>🎓 LEARN from God's Word</h3>
+                        <div id="learnContent" class="devotional-section"></div>
+                    </div>
+                    
+                    <div class="live-section">
+                        <h3>💡 LIVE God's Word</h3>
+                        <div id="liveContent" class="devotional-section"></div>
+                    </div>
+                    
+                    <div class="prayer-section">
+                        <h3>🙏 PRAY about It</h3>
+                        <div id="devotionalPrayer" class="devotional-section"></div>
+                    </div>
+                    
+                    <div class="metadata">
+                        <span id="ageGroupTag"></span>
+                        <span id="topicTag"></span>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button id="generateAnotherBtn" type="button">Generate Another</button>
+                    <button id="printBtn" type="button">Print Devotional</button>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </main>
+
+        <footer>
+            <p>Powered by AI • Assemblies of God Devotional Content</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
