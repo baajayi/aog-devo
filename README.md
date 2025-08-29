@@ -1,174 +1,160 @@
-# AOG Family Devotionals RAG Application
+# AOG Devotional Generator
 
-A RAG (Retrieval-Augmented Generation) application that generates age-appropriate Assemblies of God devotionals for different family members using your existing Pinecone index and GPT-4o-mini.
+A simple Flask RAG (Retrieval-Augmented Generation) application that generates age-appropriate Assemblies of God devotionals from scripture passages using AI and your existing Pinecone vector database.
 
 ## Features
 
-- **Age-Specific Content**: Generates devotionals tailored for Children, Teens, Young Adults, and Adults
-- **Topic-Based Generation**: Optional topic specification for focused devotionals  
-- **RAG Integration**: Uses your existing "aog-devo" Pinecone index for content retrieval
-- **Simple Web Interface**: Clean, family-friendly frontend
-- **Print Functionality**: Easy printing of generated devotionals
+- **Single-File Application**: Everything contained in one `app.py` file for simplicity
+- **Scripture-Based**: Generate devotionals from any Bible verse or passage
+- **Age-Appropriate Content**: Automatically detects and creates content for Children, Teens, Young Adults, and Adults
+- **RAG Integration**: Uses your existing "aog-devo" Pinecone index for relevant AOG content
+- **AOG Format**: Follows the official Assemblies of God Family Devotions format:
+  - Question of the Day
+  - LISTEN to God through His Word
+  - LEARN from God's Word  
+  - LIVE God's Word
+  - PRAY about It
+- **Smart Scripture Detection**: Automatically extracts Bible references from user prompts
+- **Random Scripture Fallback**: Uses random Bible verses when none are specified
+- **Clean Interface**: Simple, responsive web interface with examples
 
-## Architecture
+## How It Works
 
-- **Backend**: FastAPI with Pinecone and OpenAI integration
-- **Frontend**: Vanilla HTML/CSS/JavaScript
-- **AI Model**: GPT-4o-mini for content generation
-- **Vector Database**: Your existing Pinecone "aog-devo" index
+1. User enters a request like "Create a devotional for teens about faith using John 3:16"
+2. App detects age group (teens) and scripture reference (John 3:16)
+3. Retrieves relevant content from your Pinecone "aog-devo" index
+4. Uses OpenAI GPT-4o-mini to generate age-appropriate devotional in AOG format
+5. Displays formatted devotional with print functionality
 
 ## Prerequisites
 
 1. **Python 3.8+** installed
 2. **Environment Variables** in `.env` file:
-   ```
+   ```env
    OPENAI_API_KEY=your_openai_api_key
    PINECONE_API_KEY=your_pinecone_api_key
    ```
 3. **Pinecone Index**: Your existing "aog-devo" index with devotional content
 
-## Setup Instructions
+## Quick Start
 
-### 1. Install Backend Dependencies
-
+### 1. Install Dependencies
 ```bash
-cd backend
 pip install -r requirements.txt
 ```
 
-### 2. Environment Setup
-
-Create a `.env` file in the project root with your API keys:
-
+### 2. Set Up Environment
+Create a `.env` file in the project root:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
 PINECONE_API_KEY=your_pinecone_api_key_here
+PINECONE_ENVIRONMENT=us-east-1-aws
 ```
 
-### 3. Run the Backend Server
-
+### 3. Run the Application
 ```bash
-cd backend
-python main.py
+python app.py
 ```
 
-The API will be available at `http://localhost:8000`
+Visit: **http://localhost:5000**
 
-### 4. Serve the Frontend
+## Usage Examples
 
-You can serve the frontend using any web server. For development:
+### With Scripture Reference:
+- "Create a devotional for children about God's love using John 3:16"
+- "Make an adult devotional on forgiveness using Matthew 6:14-15"
+- "Generate a teen devotional about perseverance using Philippians 4:13"
 
-```bash
-# Using Python's built-in server
-cd frontend
-python -m http.server 3000
+### Without Scripture Reference:
+- "Write a devotional for young adults on faith and trust"
+- "Create a children's devotional about kindness"  
+- "Make a teen devotional on prayer"
 
-# Or using Node.js http-server
-cd frontend
-npx http-server -p 3000
-```
+The app will automatically choose an appropriate Bible verse when none is specified.
 
-The frontend will be available at `http://localhost:3000`
+## Age Group Keywords
 
-### 5. Open the Application
+The app automatically detects age groups from your prompt:
 
-Navigate to `http://localhost:3000` in your browser to use the application.
-
-## Usage
-
-1. **Select Age Group**: Choose from Children, Teens, Young Adults, or Adults
-2. **Optional Topic**: Enter a specific topic or use suggested topics
-3. **Generate**: Click "Generate Devotional" to create content
-4. **View Results**: Read the generated devotional with Scripture, reflection, and prayer
-5. **Print**: Use the print button to create a physical copy
-
-## Age Group Characteristics
-
-- **Children (5-12)**: Simple language, concrete examples, short content
-- **Teens (13-17)**: Relatable scenarios, practical applications for school/friends  
-- **Young Adults (18-25)**: Independence themes, career/relationship guidance
-- **Adults (26+)**: Mature concepts, family/work balance, deeper theology
-
-## API Endpoints
-
-- `GET /` - Health check
-- `POST /generate-devotional` - Generate age-specific devotional
-- `GET /topics` - Get suggested topics
-- `GET /health` - Server health status
+- **Children**: children, child, kids, kid, 5-12, elementary
+- **Teens**: teens, teen, teenagers, youth, 13-17, high school
+- **Young Adults**: young adults, college, 18-25, university  
+- **Adults**: adults, adult, parents, 26+, mature (default)
 
 ## File Structure
 
 ```
 aog-devo/
-├── backend/
-│   ├── main.py              # FastAPI application
-│   ├── rag_service.py       # RAG logic and OpenAI integration
-│   └── requirements.txt     # Python dependencies
-├── frontend/
-│   ├── index.html          # Main web interface
-│   ├── style.css           # Styling
-│   └── script.js           # Frontend logic
-├── devo.ipynb              # Original Pinecone setup notebook
-└── .env                    # Environment variables (create this)
+├── app.py              # Complete Flask application (single file)
+├── requirements.txt    # Python dependencies  
+├── devo.ipynb         # Original Pinecone setup notebook
+├── .env               # Environment variables (create this)
+└── README.md          # This file
 ```
 
-## Troubleshooting
+## API Endpoints
 
-1. **API Connection Issues**: Ensure backend is running on port 8000
-2. **CORS Errors**: Make sure the frontend is served from a web server
-3. **Authentication Errors**: Verify your OpenAI and Pinecone API keys
-4. **Empty Results**: Check that your Pinecone index "aog-devo" contains data
+- `GET /` - Main application interface
+- `POST /generate` - Generate devotional from prompt
+
+## Dependencies
+
+- **Flask**: Web framework
+- **OpenAI**: AI content generation  
+- **Pinecone**: Vector database for RAG
+- **python-dotenv**: Environment variable management
 
 ## Customization
 
-- **Modify Age Groups**: Edit the `age_group_prompts` in `rag_service.py`
-- **Change Topics**: Update the topics list in `main.py`
-- **Styling**: Customize the appearance in `frontend/style.css`
-- **Content Length**: Adjust `max_length` values in age group configurations
+### Modify Age Group Prompts
+Edit the `AGE_GROUP_PROMPTS` dictionary in `app.py` to change how devotionals are generated for each age group.
 
-## Free Deployment on Railway
+### Add More Random Bible Verses  
+Update the `RANDOM_BIBLE_VERSES` list in `app.py` to include more scripture options.
 
-### 1. Prepare for Deployment
-```bash
-# Make sure all files are ready
-git add .
-git commit -m "Prepare for Railway deployment"
-git push origin main
+### Change Styling
+The HTML template is embedded in `app.py`. Modify the CSS in the `HTML_TEMPLATE` variable to customize appearance.
+
+## Troubleshooting
+
+1. **API Errors**: Verify your OpenAI and Pinecone API keys in the `.env` file
+2. **Empty Results**: Check that your Pinecone index "aog-devo" contains data
+3. **Port Conflicts**: If port 5000 is in use, change it in the last line of `app.py`
+4. **Scripture Detection Issues**: The app uses regex patterns - you may need to adjust these for unusual scripture formats
+
+## Example Output
+
+The generated devotionals follow the AOG format:
+
 ```
+Day 1—FAMILY DEVOTIONS
 
-### 2. Deploy on Railway
-1. Visit [railway.app](https://railway.app) and sign up
-2. Click "Start a New Project" → "Deploy from GitHub repo"
-3. Select your `aog-devo` repository
-4. Railway will automatically detect and deploy your app
+Question of the Day: How does God show His love for us?
 
-### 3. Set Environment Variables
-In Railway dashboard:
-- Go to Variables tab
-- Add: `OPENAI_API_KEY=your_key_here`
-- Add: `PINECONE_API_KEY=your_key_here`
+👂 LISTEN to God through His Word
+Pray and ask God to speak to you before you read today's Scripture.
 
-### 4. Access Your App
-- Railway will provide a public URL (e.g., `https://aog-devo-production.up.railway.app`)
-- Your app will be live and accessible worldwide!
+Read John 3:16.
+[Scripture context and explanation...]
 
-### Alternative: Render Deployment
-1. Visit [render.com](https://render.com) and sign up
-2. Create "New Web Service" from GitHub
-3. Set environment variables in dashboard
-4. App will be available at your Render URL
+🎓 LEARN from God's Word  
+[Deeper questions and biblical insights...]
+
+💡 LIVE God's Word
+[Practical applications and reflection questions...]
+
+🙏 PRAY about It
+Dear God, [age-appropriate prayer]. I love You, God. Amen.
+```
 
 ## Support
 
-For issues or questions, please check:
-1. API keys are correctly set in environment variables
-2. Deployment logs for any errors
-3. Pinecone index "aog-devo" exists and contains data
-4. Internet connection for API calls
+For issues with the application:
+1. Check that your API keys are correctly set
+2. Verify your Pinecone index "aog-devo" exists and contains data  
+3. Review the console/logs for error messages
+4. Try simpler prompts if generation fails
 
-## Deployment Features
-- ✅ Single deployment (backend + frontend combined)
-- ✅ Environment variable configuration
-- ✅ Automatic scaling
-- ✅ HTTPS enabled
-- ✅ Global CDN
+---
+
+*Powered by OpenAI GPT-4 • Assemblies of God Content • Pinecone Vector Database*
