@@ -713,5 +713,9 @@ def generate():
         logger.error(f"Error in /generate endpoint: {str(e)}")
         return jsonify({'error': 'Sorry, there was an error generating your devotional. Please try again.'}), 500
 
+# For Vercel deployment - expose the Flask app
+# Vercel will automatically detect this as the WSGI application
+application = app
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
